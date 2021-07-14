@@ -1,0 +1,10 @@
+@import 'global/colors';
+@import 'global/helpers';
+
+//Components (Import all scss files from the components folder
+@import "components/*";
+
+
+.my-style {
+    color: red;
+}

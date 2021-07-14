@@ -22,7 +22,10 @@ const Home = () => {
   return (
     <div className="container">
       <div className="py-4">
-        <h1>Home Page</h1>
+        <div className="flex">
+          <h1>Managing Employees</h1>
+          <Link className="btn btn-primary" to="/users/add">+ Add Employee</Link>
+        </div>
         <table class="table border shadow">
           <thead class="thead-dark">
             <tr>
