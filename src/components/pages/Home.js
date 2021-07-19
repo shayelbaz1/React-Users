@@ -32,12 +32,16 @@ const Home = () => {
         </section>
 
         <table class="table border shadow">
-          <thead class="thead-dark">
+          <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">User Name</th>
-              <th scope="col">Email</th>
+              <th scope="col">Image</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
+              <th scope="col">Roll</th>
+              <th scope="col">Start Date</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -45,9 +49,15 @@ const Home = () => {
             {users.map((user, index) => (
               <tr>
                 <th scope="row">{index + 1}</th>
-                <td>{user.name}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
+                <td>
+                  <img src={user.image} alt="user" width="70"/> 
+                </td>
+                <td>{user.fname}</td>
+                <td>{user.lname}</td>
+                <td>{user.phone}</td>
+                <td>{user.address.street} {user.address.numebr} , {user.address.city}</td>
+                <td>{user.roll}</td>
+                <td>{user.start_date}</td>
                 <td>
                   <Link class="btn btn-primary mr-2" to={`/users/${user.id}`}>
                     View
