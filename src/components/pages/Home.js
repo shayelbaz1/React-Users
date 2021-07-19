@@ -20,12 +20,17 @@ const Home = () => {
   };
 
   return (
-    <div className="container">
+    <div className="home-page container">
       <div className="py-4">
-        <div className="flex">
+
+        <section className="home-title flex space-between align-center">
+
           <h1>Managing Employees</h1>
+
           <Link className="btn btn-primary" to="/users/add">+ Add Employee</Link>
-        </div>
+          
+        </section>
+
         <table class="table border shadow">
           <thead class="thead-dark">
             <tr>
