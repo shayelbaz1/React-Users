@@ -1,4 +1,5 @@
 import React from "react";
+import './styles'
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import Home from "./components/pages/Home";
 import About from "./components/pages/About";
@@ -9,11 +10,9 @@ import {
   Route,
   Switch
 } from "react-router-dom";
-import styles from './styles'
 import NotFound from "./components/pages/NotFound";
-import AddUser from "./components/users/AddUser";
-import EditUser from "./components/users/EditUser";
-import User from "./components/users/User";
+import Signin from "./components/pages/SignIn";
+import Signup from "./components/pages/Signup"
 
 function App(props) {
   return (
@@ -23,11 +22,12 @@ function App(props) {
 
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/signin" component={Signin} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/users/add" component={Home} />
+          <Route exact path="/users/edit/:id" component={Home} />
           <Route exact path="/about" component={About} />
           <Route exact path="/contact" component={Contact} />
-          <Route exact path="/users/add" component={AddUser} />
-          <Route exact path="/users/edit/:id" component={EditUser} />
-          <Route exact path="/users/:id" component={User} />
           <Route component={NotFound} />
         </Switch>
       </div>

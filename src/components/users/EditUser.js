@@ -1,95 +1,143 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 
-const EditUser = () => {
+const EditUser = ({setIsEditUser,users,setHomeUsers}) => {
   let history = useHistory();
   const { id } = useParams();
   const [user, setUser] = useState({
-    name: "",
-    username: "",
-    email: "",
-    phone: "",
-    website: ""
-  });
+      id: id,
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWSwL6QEGjHRyGx0Dv4tpZjxelnG2MWh1A-9MFs2rw9MZDG-gWgWj86z5e0prysSigS6I&usqp=CAU",
+      fname: "",
+      lname: "",
+      phone: "",
+      address: {
+        street: "Rotchild",
+        number: 22,
+        city:"Tel Aviv"
+      },
+      company: "ls Technology",
+      roll: "HR",
+      start_date: 1626701437857
+    }
+  );
 
-  const { name, username, email, phone, website } = user;
+  const { fname,lname,phone,address,roll } = user;
   const onInputChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-  
-  const loadUser = async () => {
-    const result = await axios.get(`http://localhost:3003/users/${id}`);
-    setUser(result.data);
-  };
+
+  const loadUser = useCallback(async () => {
+    const res = await axios.get(`http://localhost:3003/users/${id}`);
+    setUser(res.data);
+  }, [id])
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
+
 
   const onSubmit = async e => {
     e.preventDefault();
     await axios.put(`http://localhost:3003/users/${id}`, user);
+    const idx = users.findIndex(user=>+id===user.id)
+    users.splice(idx,1,user)
+    setHomeUsers(users);
+    setIsEditUser(false)
     history.push("/");
   };
 
 
   return (
-    <div className="container">
-      <div className="w-75 mx-auto shadow p-5">
+    <div className="edit-user container">
+      <div className="mx-auto shadow p-5">
         <h2 className="text-center mb-4">Edit A User</h2>
-        <form onSubmit={e => onSubmit(e)}>
+
+        <form onSubmit={(e) => onSubmit(e)}>
           <div className="form-group">
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter Your Name"
-              name="name"
-              value={name}
-              onChange={e => onInputChange(e)}
+              placeholder="First Name"
+              name="fname"
+              value={fname}
+              onChange={(e) => onInputChange(e)}
             />
           </div>
+
           <div className="form-group">
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter Your Username"
-              name="username"
-              value={username}
-              onChange={e => onInputChange(e)}
+              placeholder="Last Name"
+              name="lname"
+              value={lname}
+              onChange={(e) => onInputChange(e)}
             />
           </div>
-          <div className="form-group">
-            <input
-              type="email"
-              className="form-control form-control-lg"
-              placeholder="Enter Your E-mail Address"
-              name="email"
-              value={email}
-              onChange={e => onInputChange(e)}
-            />
-          </div>
+
           <div className="form-group">
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter Your Phone Number"
+              placeholder="Phone"
               name="phone"
               value={phone}
-              onChange={e => onInputChange(e)}
+              onChange={(e) => onInputChange(e)}
             />
           </div>
+
           <div className="form-group">
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter Your Website Name"
-              name="website"
-              value={website}
-              onChange={e => onInputChange(e)}
+              placeholder="City"
+              name="city"
+              value={address.city}
+              onChange={(e) => onInputChange(e)}
             />
           </div>
-          <button className="btn btn-warning btn-block">Update User</button>
+
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control form-control-lg"
+              placeholder="Street"
+              name="street"
+              value={address.street}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="number"
+              className="form-control form-control-lg"
+              placeholder="Street Number"
+              name="number"
+              value={address.number}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="form-group">
+            <select
+              id="formsel"
+              className="form-control form-control-lg"
+              name="roll"
+              onChange={(e) => onInputChange(e)}
+              value={roll}
+            >
+              <option value="" disabled selected>
+                Roll
+              </option>
+              <option value="HR">HR</option>
+              <option value="FS">FS</option>
+              <option value="CEO">CEO</option>
+            </select>
+          </div>
+          
+          <button className="btn btn-primary btn-block">Update User</button>
         </form>
       </div>
     </div>
