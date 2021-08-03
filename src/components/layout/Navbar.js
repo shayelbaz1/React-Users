@@ -1,12 +1,28 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+
 const logo = require("../../assets/logo.png");
+// eslint-disable-next-line
 const userImg =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWSwL6QEGjHRyGx0Dv4tpZjxelnG2MWh1A-9MFs2rw9MZDG-gWgWj86z5e0prysSigS6I&usqp=CAU";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  let history = useHistory();
+  const SigninPath = history.location.pathname === "/signin";
+  const SignupPath = history.location.pathname === "/signup";
+  const user = useSelector((state) => state.userReducer.loggedInUser);
+  const onLoginPages = SigninPath || SignupPath;
+
+  const onLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    history.push("/signin");
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light">
+    <nav className="navbar navbar-expand-sm navbar-light">
       <div className="container col-12">
         <Link className="navbar-brand" href="/" to="/">
           <img src={logo} alt="ls-techs" width="131"></img>
@@ -26,32 +42,49 @@ const Navbar = () => {
 
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <NavLink className="nav-link" exact to="/">
-                Home
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" exact to="/about">
-                About
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" exact to="/contact">
-                Contact
-              </NavLink>
-            </li>
+            {!SigninPath && !SignupPath && (
+              <>
+                <li className="nav-item">
+                  <NavLink className="nav-link" exact to="/">
+                    Home
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" exact to="/about">
+                    About
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" exact to="/contact">
+                    Contact
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
 
         <div className="flex-center">
-          <img className="user-img" src={userImg} alt="user img" width="32" />
-          <p>Roni Bonim</p>
+          {user.fname && (
+            <>
+              <img
+                className="user-img"
+                src={user.image}
+                alt="user img"
+                width="32"
+              />
+              <p>
+                {user.fname} {user.lname}
+              </p>
+            </>
+          )}
         </div>
 
-        <Link className="mx-4" to="/signin">
-          <i className="fas fa-sign-out-alt"></i>
-        </Link>
+        {!onLoginPages && (
+          <div className="mx-4" onClick={() => onLogout()}>
+            <i className="fas fa-sign-out-alt"></i>
+          </div>
+        )}
       </div>
     </nav>
   );

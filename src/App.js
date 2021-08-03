@@ -2,8 +2,6 @@ import React from "react";
 import "./styles";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "./store";
 
 import Home from "./components/pages/Home";
 import About from "./components/pages/About";
@@ -16,7 +14,6 @@ import Signup from "./components/pages/Signup";
 
 function App(props) {
   return (
-    <Provider store={store()}>
       <Router>
         <div className="App">
           <Navbar />
@@ -33,7 +30,6 @@ function App(props) {
           </Switch>
         </div>
       </Router>
-    </Provider>
   );
 }
 

@@ -1,31 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
 const profile = require("../../assets/profile.png");
 
 const Signup = () => {
+  const dispatch = useDispatch()
   let history = useHistory();
-  const [repassword , setRepassword] = React.useState("1234")
-  const [user, setUser] = React.useState({
-    id:0,
-    image: "https://st2.depositphotos.com/1104517/11965/v/600/depositphotos_119659092-stock-illustration-male-avatar-profile-picture-vector.jpg",
+  const [repassword, setRepassword] = useState("1234");
+  const [user, setUser] = useState({
+    id: 0,
+    image:
+      "https://st2.depositphotos.com/1104517/11965/v/600/depositphotos_119659092-stock-illustration-male-avatar-profile-picture-vector.jpg",
     fname: "Roni",
     lname: "Bonim",
     phone: "050 9998376",
-    address:{
+    address: {
       city: "Tel Aviv",
       street: "Rotchild",
-      number: "22"
+      number: "22",
     },
     company: " Technology",
     roll: "",
     start_date: Date.now(),
-    password:"1234",
-    email: "email3@gmail.com"
+    password: "1234",
+    email: "shay2@gmail.com",
   });
-
 
   const { fname, lname, email, password } = user;
 
@@ -37,18 +39,11 @@ const Signup = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:3003/users", user);
-      console.log('res:', res.statusText)
+      dispatch({ type: "SET_USER", payload: res.data.user });
       history.push("/");
     } catch (error) {
-      console.log('error: Cannot sign up')
-      alert("Email already exists")
+      alert(error.response.data)
     }
-    // const lastIdx = users[0].id
-    // user.id = lastIdx+1
-    // setUser({...user})
-    // setHomeUsers([user,...users ]);
-    // setIsAddUser(false)
-    // history.push("/");
   };
 
   return (
@@ -68,7 +63,7 @@ const Signup = () => {
                 placeholder="First Name"
                 value={fname}
                 name="fname"
-                onChange={(e)=>onInputChange(e)}
+                onChange={(e) => onInputChange(e)}
               />
             </div>
             <div className="form-group">
@@ -78,7 +73,7 @@ const Signup = () => {
                 id="lname"
                 value={lname}
                 name="lname"
-                onChange={(e)=>onInputChange(e)}
+                onChange={(e) => onInputChange(e)}
                 placeholder="Last Name"
               />
             </div>
@@ -89,7 +84,7 @@ const Signup = () => {
                 id="email"
                 value={email}
                 name="email"
-                onChange={(e)=>onInputChange(e)}
+                onChange={(e) => onInputChange(e)}
                 placeholder="Email"
                 aria-describedby="emailHelp"
               />
@@ -104,7 +99,7 @@ const Signup = () => {
                 id="password"
                 value={password}
                 name="password"
-                onChange={(e)=>onInputChange(e)}
+                onChange={(e) => onInputChange(e)}
                 placeholder="Password"
               />
             </div>
@@ -115,7 +110,7 @@ const Signup = () => {
                 id="repassword"
                 value={repassword}
                 name="repassword"
-                onChange={(e)=>setRepassword(e.target.value)}
+                onChange={(e) => setRepassword(e.target.value)}
                 placeholder="Retype Password"
               />
             </div>

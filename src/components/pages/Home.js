@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 import AddUser from "../users/AddUser";
 import EditUser from "../users/EditUser";
+import { useHistory } from "react-router-dom";
 
 const Home = () => {
+  let history = useHistory();
+  const user = useSelector((state) => state.userReducer.loggedInUser);
   const [users, setUser] = useState([]);
   const [isAddUser, setIsAddUser] = useState(false);
   const [isEditUser, setIsEditUser] = useState(false);
 
   useEffect(() => {
+    if (Object.keys(user).length === 0) history.push("/signin");
     loadUsers();
+    // eslint-disable-next-line
   }, []);
 
   const loadUsers = async () => {
@@ -106,39 +111,41 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {users.slice(0).reverse().map((user, index) => (
-              <tr key={user.id}>
-                <td id="index">{index+1}</td>
-                <td id="img">
-                  <img className="profile" src={user.image} alt="user" />
-                </td>
-                <td id="fname">{user.fname}</td>
-                <td>{user.lname}</td>
-                <td id="phone">{user.phone}</td>
-                <td id="address">
-                  {user.address.street} {user.address.number} ,{" "}
-                  {user.address.city}
-                </td>
-                <td id="roll">{user.roll}</td>
-                <td id="date">{formatDate(user.start_date)}</td>
-                <td id="actions">
-                  <div>
+            {users
+              .slice(0)
+              .reverse()
+              .map((user, index) => (
+                <tr key={user.id}>
+                  <td id="index">{index + 1}</td>
+                  <td id="img">
+                    <img className="profile" src={user.image} alt="user" />
+                  </td>
+                  <td id="fname">{user.fname}</td>
+                  <td>{user.lname}</td>
+                  <td id="phone">{user.phone}</td>
+                  <td id="address">
+                    {user.address.street} {user.address.number} ,{" "}
+                    {user.address.city}
+                  </td>
+                  <td id="roll">{user.roll}</td>
+                  <td id="date">{formatDate(user.start_date)}</td>
+                  <td id="actions">
+                    <div>
+                      <Link
+                        className="btn mr-2"
+                        to={`/users/edit/${user.id}`}
+                        onClick={() => setIsEditUser(true)}
+                      >
+                        <i className="fas fa-pencil-alt"></i>
+                      </Link>
 
-                    <Link
-                      className="btn mr-2"
-                      to={`/users/edit/${user.id}`}
-                      onClick={() => setIsEditUser(true)}
-                    >
-                      <i className="fas fa-pencil-alt"></i>
-                    </Link>
-
-                    <div className="btn" onClick={() => deleteUser(user.id)}>
-                      <i className="far fa-trash-alt"></i>
+                      <div className="btn" onClick={() => deleteUser(user.id)}>
+                        <i className="far fa-trash-alt"></i>
+                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
